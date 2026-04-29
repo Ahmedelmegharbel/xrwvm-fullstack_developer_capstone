@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 # from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 # from django.shortcuts import get_object_or_404, render, redirect
@@ -15,12 +15,11 @@ from .populate import initiate
 from .models import CarMake, CarModel
 from .restapis import get_request, analyze_review_sentiments, post_review
 
-
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 # Views here.
+
 
 # `login_request` view to handle sign in request
 @csrf_exempt
@@ -64,12 +63,13 @@ def registration(request):
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except Exception as err:
+    except Exception:
         logger.debug("{} is new user".format(username))
 
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, 
+        user = User.objects.create_user(username=username,
+        first_name=first_name,
         last_name=last_name, password=password, email=email)
         # Login the user and redirect to list page
         login(request, user)
@@ -121,7 +121,7 @@ def add_review(request):
         try:
             response = post_review(data)
             return JsonResponse({"status": 200, "response": response})
-        except Exception as err:
+        except Exception:
             return JsonResponse({"status": 401, "mes"
             "sage": "Error in posting review"})
     else:
@@ -140,4 +140,3 @@ def get_cars(request):
         cars.append({"CarModel": car_model.name, "Car"
         "Make": car_model.car_make.name})
     return JsonResponse({"CarModels": cars})
-    
