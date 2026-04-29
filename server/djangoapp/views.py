@@ -20,7 +20,6 @@ from .restapis import get_request, analyze_review_sentiments, post_review
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
 # Views here.
 
 # `login_request` view to handle sign in request
@@ -39,11 +38,13 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
+
 # `logout_request` view to handle sign out request
 def logout_request(request):
     logout(request)              # Terminate user session
     data = {"userName": ""}      # Returns an empty username
     return JsonResponse(data)
+
 
 # `registration` view to handle sign up request
 @csrf_exempt
@@ -68,8 +69,8 @@ def registration(request):
 
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, \
-         last_name=last_name, password=password, email=email)
+        user = User.objects.create_user(username=username, first_name=first_name, 
+        last_name=last_name, password=password, email=email)
         # Login the user and redirect to list page
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
@@ -121,8 +122,8 @@ def add_review(request):
             response = post_review(data)
             return JsonResponse({"status": 200, "response": response})
         except Exception as err:
-            return JsonResponse({"status": 401, "message":  \
-            "Error in posting review"})
+            return JsonResponse({"status": 401, "mes"
+            "sage": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized User"})
 
@@ -136,7 +137,7 @@ def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": \
-         car_model.car_make.name})
+        cars.append({"CarModel": car_model.name, "Car"
+        "Make": car_model.car_make.name})
     return JsonResponse({"CarModels": cars})
     
